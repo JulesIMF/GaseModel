@@ -46,10 +46,30 @@ void Molecule::addMomentum(Vector2 dp_i)
     dp += dp_i;
 }
 
+void Molecule::compareParents(Molecule *first, Molecule *second)
+{
+    bool areSiblings = (first->parent == second->parent) && first->parent;
+    first->foundSiblingNear  |= areSiblings;
+    second->foundSiblingNear |= areSiblings;
+}
 
-void Molecule::applyMomentum()
+bool Molecule::commonParents(Molecule *first, Molecule *second)
+{
+    bool areSiblings = (first->parent == second->parent) && first->parent;
+    return areSiblings;
+}
+
+void Molecule::apply()
 {
     momentum += dp;
+    if (!foundSiblingNear)
+        parent = nullptr;
+}
+
+void Molecule::reset()
+{
+    dp = {0, 0};
+    foundSiblingNear = false;
 }
 
 // +++++
@@ -65,4 +85,36 @@ void Ball::display(JG::Window& window)
 
     circle.setColor(ballColor);
     circle.draw(window);
+}
+
+
+void Square::display(JG::Window& window)
+{
+    JG::Color squareColor = {2, 161, 196}; // Голубой
+    JG::Rectangle rectangle(position.getX() - radius,
+                            position.getY() - radius,
+                            2 * radius,
+                            2 * radius);
+
+    rectangle.setColor(squareColor);
+    rectangle.draw(window);
+}
+
+void Square::apply()
+{
+    Molecule::apply();
+    mass += dm;
+
+
+    // Площадь квадрата = 4 * radius, поэтому 
+    // нужно делить ds на 4
+    radius = sqrt(radius * radius + ds / 4);
+}
+
+void Square::reset()
+{
+    Molecule::reset();
+    dm = 0;
+    ds = 0;
+    chemicalEnergy = 0;
 }

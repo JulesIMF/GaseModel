@@ -20,17 +20,18 @@
 # Defines
 #
 
-CXX		= g++ -std=c++17
-INC		= -Iincludes -Iwrapper/includes
+CXX	    = g++ -std=c++17
+INC	    = -Iincludes -Iwrapper/includes
 SFML    = -lsfml-graphics -lsfml-window -lsfml-system
-OPT		= -O2
-CFLAGS	= $(OPT) -g $(INC)
-OBJ		= obj/
+OPT	    = -O2
+DEF		= -DNDEBUG
+CFLAGS	= $(OPT) $(DEF) -g $(INC)
+OBJ	    = obj/
 
 FILES   = $(OBJ)main.o \
           $(OBJ)wrapper/Wrapper.o \
-		  $(OBJ)vector/Vector2.o \
-		  $(OBJ)molecules/Molecule.o $(OBJ)molecules/Manager.o
+          $(OBJ)vector/Vector2.o \
+          $(OBJ)molecules/Molecule.o $(OBJ)molecules/Manager.o
 		  
 
 #

@@ -42,14 +42,55 @@ struct Manager
     void destroy(size_t index);
     size_t size() const;
     double energy() const;
+    double totalEnergy() const;
+    
+    void setMinEnergy(MoleculeType first, MoleculeType second, double newMinEnergy);
+    void callVirtual(Molecule* first, Molecule* second);
     ~Manager();
 
+    typedef void (Manager::*InteractionFunction)(Molecule *first, Molecule *second);
+
 protected:
-    std::vector<Molecule*> gase;
-    void reflectMolecules(Molecule* first, Molecule* second);
+    std::vector<Molecule*> gas;
     void reflectFromWalls(Molecule* molecule);
     double boundX, boundY;  
     double initEnergy;
+    InteractionFunction vTable[nTypesMolecules][nTypesMolecules];
+    double minEnergy[nTypesMolecules][nTypesMolecules];
+    void updateStates();
+
+    // Interation Functions
+    bool underMinEnergy(Molecule* first, Molecule* second);
+    void interactBallBall(Molecule* first, Molecule* second);
+    void interactSquareSquare(Molecule* first, Molecule* second);
+    void interactBallSquare(Molecule* first, Molecule* second);
+    void interactSquareBall(Molecule* first, Molecule* second);
+
+    // Debug
+
+    int nTotalBalls = 0;
+    
+    void countBalls()
+    {
+        int ans = 0;
+        for (auto p : gas)
+        {
+            if (p->state == MoleculeState::OUT)
+                continue;
+
+            if (p->type == (int)MoleculeType::BALL)
+                ans++;
+            else
+                ans += reinterpret_cast<Square*>(p)->nBalls;
+        }
+
+        if (!nTotalBalls) nTotalBalls = ans;
+        else if(nTotalBalls != ans)
+        {
+            printf("Was %d, now %d!\n", nTotalBalls, ans);
+            __asm__("int $3\n");
+        }
+    }
 };
 
 

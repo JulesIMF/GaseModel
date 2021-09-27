@@ -1,6 +1,6 @@
 # What is this?
 
-This is an educational project within C++ course. The goal is to get a "gase model" --- molecules that fly in a 2-d window interacting with each other and wint the walls (bounds of the window).
+This is an educational project within C++ course. The goal is to get a "gas model" --- molecules that fly in a 2-d window interacting with each other and wint the walls (bounds of the window).
 
 # What are the smodules?
 

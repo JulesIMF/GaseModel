@@ -15,6 +15,7 @@ Author / Creation date:
     JulesIMF / 12.09.21
 
 Revision History:
+	27.09.21  11:07		fillManager now has onlyBalls parameter
 
 --*/
 
@@ -62,29 +63,64 @@ bool timeHasCome(high_resolution_clock& clock,
     return timeHasCome(clock, previousTime, perSeconds, timeSinceLast);
 }
 
-void fillManager(Manager& manager, int step, int boundX, int boundY, int maxSpeed, double radius)
+void fillManager(Manager& manager, 
+                 int step, 
+                 int boundX, 
+                 int boundY, 
+                 int maxSpeed, 
+                 double radius, 
+                 double mass,
+                 bool onlyBalls = false)
 {
     srand(time(0));
 
     for (int x = 0; x < boundX; x += step)
     {
         for (int y = 0; y < boundY; y += step)
-        {
-            manager.insert(new Ball(
-                //rand() % 5 + 5,
-                radius,
+        {            
+            int sgn1 = (rand() & 1) ? -1 : 1,
+                sgn2 = (rand() & 1) ? -1 : 1;
 
-                //double(rand() % 1000 + 1) / 1000.0,
-                0.1,
-
-                {x, y},
-
-                {rand() % (maxSpeed), rand() % (maxSpeed)}));
+            if ( ((x / step + y / step) & 1) || // шахматная расстановка
+                 onlyBalls ) 
+                manager.insert(new Ball(
+                    radius,
+                    mass,
+                    {x, y},
+                    mass * Vector2{sgn1 * rand() % (maxSpeed), sgn2 * rand() % (maxSpeed)}));
+            
+            else
+                manager.insert(new Square(
+                    radius,
+                    mass,
+                    {x, y},
+                    mass * Vector2{sgn1 * rand() % (maxSpeed), sgn2 * rand() % (maxSpeed)}));
         }
     }
+
+    manager.insert(new Square(
+                    radius,
+                    mass,
+                    {radius * 2, boundY / 2},
+                    mass * Vector2{10 * mass, 0}));
+
+    manager.insert(new Square(
+                    radius,
+                    mass,
+                    {boundX - radius * 2, boundY / 2},
+                    mass * Vector2{-10 * mass, 0}));
+
+    manager.setMinEnergy(MoleculeType::BALL, MoleculeType::BALL, onlyBalls ? INFINITY : 10);
+    manager.setMinEnergy(MoleculeType::BALL, MoleculeType::SQUARE, 0);
+    manager.setMinEnergy(MoleculeType::SQUARE, MoleculeType::SQUARE, 0);
 }
 
-int main()
+void printEnergy(Manager const& manager, int time)
+{
+    printf("%ds: K = %lf, H = %lf\n", time, manager.energy(), manager.totalEnergy());
+}
+
+int main(int nArgs, char const** vArgs)
 {
     int const boundX = 1280, boundY = 720;
     Window window(boundX, boundY, "ALEXANDR GANDYRBAYEV", Window::Default ^ Window::Resize);
@@ -95,15 +131,28 @@ int main()
     auto previousTimeDisplayed  = clock.now();
     auto previousTimeEnergy     = clock.now();
 
-    double fps = 60.0,     // frames ps
+    double fps = 60.0,      // frames ps
            cps = fps * 5,   // calculates ps
            eps = 1;         // energies ps
 
     Manager manager((double)boundX, (double)boundY);
-    
-    int const nMolecules = 2500;
-    fillManager(manager, 300, boundX, boundY, 200, 40);
-    printf("%-2d s: K = %lf\n", 0, manager.energy());
+
+
+    int step        = 30;
+    int maxSpeed    = 100;
+    double radius   = 10;
+    double mass     = 20;
+    bool onlyBalls  = nArgs > 1;
+    fillManager(manager, 
+                step, 
+                boundX, 
+                boundY, 
+                maxSpeed, 
+                radius, 
+                mass,
+                onlyBalls);
+
+    printEnergy(manager, 0);
 
     while(true)
     {
@@ -134,7 +183,7 @@ int main()
         if (timeHasCome(clock, previousTimeEnergy, eps))
         {
             static int time = 0;
-            printf("%-2d s: K = %lf\n", ++time, manager.energy() );
+            printEnergy(manager, ++time);
         }
     }
 }
