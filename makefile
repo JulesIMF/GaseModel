@@ -23,7 +23,7 @@
 CXX	    = g++ -std=c++17
 INC	    = -Iincludes -Iwrapper/includes
 SFML    = -lsfml-graphics -lsfml-window -lsfml-system
-OPT	    = -O2
+OPT	    = -O0
 DEF		= -DNDEBUG
 CFLAGS	= $(OPT) $(DEF) -g $(INC)
 OBJ	    = obj/
@@ -31,7 +31,9 @@ OBJ	    = obj/
 FILES   = $(OBJ)main.o \
           $(OBJ)wrapper/Wrapper.o \
           $(OBJ)vector/Vector2.o \
-          $(OBJ)molecules/Molecule.o $(OBJ)molecules/Manager.o
+          $(OBJ)molecules/Molecule.o \
+		  $(OBJ)molecules/Manager.o \
+		  $(OBJ)molecules/physics.o
 		  
 
 #

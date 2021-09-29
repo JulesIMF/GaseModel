@@ -43,6 +43,10 @@ struct Manager
     size_t size() const;
     double energy() const;
     double totalEnergy() const;
+    double totalArea() const;
+    double totalMass() const;
+    void normalize();
+
     
     void setMinEnergy(MoleculeType first, MoleculeType second, double newMinEnergy);
     void callVirtual(Molecule* first, Molecule* second);
@@ -53,8 +57,15 @@ struct Manager
 protected:
     std::vector<Molecule*> gas;
     void reflectFromWalls(Molecule* molecule);
-    double boundX, boundY;  
+    double boundX, boundY;
+
+    // Normalization
     double initEnergy;
+    double initArea;
+    double initMass;
+    void recalcInit();
+
+
     InteractionFunction vTable[nTypesMolecules][nTypesMolecules];
     double minEnergy[nTypesMolecules][nTypesMolecules];
     void updateStates();

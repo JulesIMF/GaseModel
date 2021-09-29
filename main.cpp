@@ -15,6 +15,7 @@ Author / Creation date:
     JulesIMF / 12.09.21
 
 Revision History:
+	29.09.21  23:35		Now total energy (H), mass (M) and area (S) are printed
 	27.09.21  11:07		fillManager now has onlyBalls parameter
 
 --*/
@@ -98,26 +99,33 @@ void fillManager(Manager& manager,
         }
     }
 
-    manager.insert(new Square(
-                    radius,
-                    mass,
-                    {radius * 2, boundY / 2},
-                    mass * Vector2{10 * mass, 0}));
+    // manager.insert(new Square(
+    //                 radius,
+    //                 mass,
+    //                 {radius * 2, boundY / 2},
+    //                 mass * Vector2{maxSpeed, 0}));
 
-    manager.insert(new Square(
-                    radius,
-                    mass,
-                    {boundX - radius * 2, boundY / 2},
-                    mass * Vector2{-10 * mass, 0}));
+    // manager.insert(new Square(
+    //                 radius,
+    //                 mass,
+    //                 {boundX - radius * 2, boundY / 2},
+    //                 mass * Vector2{-maxSpeed, 0}));
 
-    manager.setMinEnergy(MoleculeType::BALL, MoleculeType::BALL, onlyBalls ? INFINITY : 10);
-    manager.setMinEnergy(MoleculeType::BALL, MoleculeType::SQUARE, 0);
-    manager.setMinEnergy(MoleculeType::SQUARE, MoleculeType::SQUARE, 0);
+    double stdEnergy = mass * maxSpeed * maxSpeed / 10.0;
+
+    manager.setMinEnergy(MoleculeType::BALL, MoleculeType::BALL, onlyBalls ? INFINITY : stdEnergy);
+    manager.setMinEnergy(MoleculeType::BALL, MoleculeType::SQUARE, stdEnergy * (8/5));
+    manager.setMinEnergy(MoleculeType::SQUARE, MoleculeType::SQUARE, stdEnergy);
 }
 
-void printEnergy(Manager const& manager, int time)
+void printState(Manager const& manager, int time)
 {
-    printf("%ds: K = %lf, H = %lf\n", time, manager.energy(), manager.totalEnergy());
+    printf("%ds: K = %lf, H = %lf, S = %lf, M = %lf\n", 
+           time, 
+           manager.energy(),
+           manager.totalEnergy(),
+           manager.totalArea(),
+           manager.totalMass());
 }
 
 int main(int nArgs, char const** vArgs)
@@ -129,19 +137,18 @@ int main(int nArgs, char const** vArgs)
     high_resolution_clock clock;
     auto previousTimeStepped    = clock.now();
     auto previousTimeDisplayed  = clock.now();
-    auto previousTimeEnergy     = clock.now();
+    auto previousTimeState      = clock.now();
 
-    double fps = 60.0,      // frames ps
-           cps = fps * 5,   // calculates ps
-           eps = 1;         // energies ps
+    double fps = 60.0,     // frames ps
+           cps = fps * 5,  // calculates ps
+           sps = 1;        // states ps
 
     Manager manager((double)boundX, (double)boundY);
 
-
-    int step        = 30;
-    int maxSpeed    = 100;
+    int step        = 40;
+    int maxSpeed    = 200;
     double radius   = 10;
-    double mass     = 20;
+    double mass     = 5;
     bool onlyBalls  = nArgs > 1;
     fillManager(manager, 
                 step, 
@@ -152,7 +159,7 @@ int main(int nArgs, char const** vArgs)
                 mass,
                 onlyBalls);
 
-    printEnergy(manager, 0);
+    printState(manager, 0);
 
     while(true)
     {
@@ -180,10 +187,10 @@ int main(int nArgs, char const** vArgs)
             manager.nextStep(timeSinceLastStep);
         }
 
-        if (timeHasCome(clock, previousTimeEnergy, eps))
+        if (timeHasCome(clock, previousTimeState, sps))
         {
             static int time = 0;
-            printEnergy(manager, ++time);
+            printState(manager, ++time);
         }
     }
 }

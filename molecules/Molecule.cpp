@@ -116,5 +116,4 @@ void Square::reset()
     Molecule::reset();
     dm = 0;
     ds = 0;
-    chemicalEnergy = 0;
 }

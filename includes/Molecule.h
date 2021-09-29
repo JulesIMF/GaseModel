@@ -43,6 +43,9 @@ struct Molecule
     double getRadius() { return radius; }
     double getMass()   { return mass; }
 
+    void normalizeMass(double coef)   { mass *= coef; }
+    void normalizeRadius(double coef) { radius *= coef; }
+
 
     void setParent(Molecule* newParent)
     {
