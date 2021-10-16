@@ -3,6 +3,7 @@ obj/
 JG/debug/
 JG/obj/
 *.o
+*.a
 class.txt
 Notes.txt
 #licenseheader
