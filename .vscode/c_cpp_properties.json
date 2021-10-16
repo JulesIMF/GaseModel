@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/includes",
-                "${workspaceFolder}/wrapper/includes"
+                "${workspaceFolder}/JG/includes"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

@@ -66,6 +66,7 @@ Manager::~Manager()
 size_t Manager::insert(Molecule* molecule)
 {
     gas.push_back(molecule);
+    molecule->state = MoleculeState::OFF;
     recalcInit();
     return gas.size() - 1;
 }
@@ -92,14 +93,13 @@ void Manager::destroy(size_t index)
 }
 
 
-void Manager::display(JG::Window& window) const
-{   
-    window.beginDrawing();
+void Manager::display(JG::Canvas& canvas) const
+{
 
     for (auto& molecule : gas)
-        molecule->display(window);
+        molecule->display(canvas);
     
-    window.endDrawing();
+    canvas.flush();
 }
 
 

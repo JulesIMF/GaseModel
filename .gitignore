@@ -1,5 +1,8 @@
 mol
 obj/
+JG/debug/
+JG/obj/
 *.o
 class.txt
+Notes.txt
 #licenseheader

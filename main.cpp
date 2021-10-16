@@ -30,6 +30,7 @@ Revision History:
 #include <random>
 #include <chrono>
 #include <Manager.h>
+#include "UI.h"
 
 //
 // Defines
@@ -37,6 +38,8 @@ Revision History:
 
 using namespace JG;
 using namespace std::chrono;
+
+
 
 bool timeHasCome(high_resolution_clock& clock, 
                  _V2::system_clock::time_point& previousTime,
@@ -75,6 +78,8 @@ void fillManager(Manager& manager,
 {
     srand(time(0));
 
+    goto SettingEnergies; // Don`t want to wrap the loop into an if
+
     for (int x = 0; x < boundX; x += step)
     {
         for (int y = 0; y < boundY; y += step)
@@ -99,17 +104,7 @@ void fillManager(Manager& manager,
         }
     }
 
-    // manager.insert(new Square(
-    //                 radius,
-    //                 mass,
-    //                 {radius * 2, boundY / 2},
-    //                 mass * Vector2{maxSpeed, 0}));
-
-    // manager.insert(new Square(
-    //                 radius,
-    //                 mass,
-    //                 {boundX - radius * 2, boundY / 2},
-    //                 mass * Vector2{-maxSpeed, 0}));
+SettingEnergies:
 
     double stdEnergy = mass * maxSpeed * maxSpeed / 10.0;
 
@@ -128,11 +123,12 @@ void printState(Manager const& manager, int time)
            manager.totalMass());
 }
 
+
 int main(int nArgs, char const** vArgs)
 {
     int const boundX = 1280, boundY = 720;
-    Window window(boundX, boundY, "ALEXANDR GANDYRBAYEV", Window::Default ^ Window::Resize);
-    Event event;
+    Main::MainWindow window;
+    Event event = {};
 
     high_resolution_clock clock;
     auto previousTimeStepped    = clock.now();
@@ -143,21 +139,23 @@ int main(int nArgs, char const** vArgs)
            cps = fps * 5,  // calculates ps
            sps = 1;        // states ps
 
-    Manager manager((double)boundX, (double)boundY);
+    Manager manager((double)Main::width, (double)Main::height);
+    Main::manager = &manager;
 
-    int step        = 40;
-    int maxSpeed    = 200;
-    double radius   = 10;
-    double mass     = 5;
-    bool onlyBalls  = nArgs > 1;
+    Main::step      = 100;
+    Main::maxSpeed  = 200;
+    Main::radius    = 10;
+    Main::mass      = 5;
+    Main::onlyBalls = nArgs > 1;
+
     fillManager(manager, 
-                step, 
-                boundX, 
-                boundY, 
-                maxSpeed, 
-                radius, 
-                mass,
-                onlyBalls);
+                Main::step, 
+                Main::width, 
+                Main::height, 
+                Main::maxSpeed, 
+                Main::radius, 
+                Main::mass,
+                Main::onlyBalls);
 
     printState(manager, 0);
 
@@ -165,12 +163,12 @@ int main(int nArgs, char const** vArgs)
     {
         while (window.pollEvent(event))
         {
-            switch(event.type)
+            switch (event.type)
             {
             case Event::Close:
                 window.close();
                 return 0;
-
+            
             default:
                 break;
             }
@@ -178,7 +176,7 @@ int main(int nArgs, char const** vArgs)
 
         if (timeHasCome(clock, previousTimeDisplayed, fps))
         {
-            manager.display(window);
+           manager.display(*Main::canvas);
         }
 
         double timeSinceLastStep = 0;

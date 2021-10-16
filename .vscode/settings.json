@@ -50,6 +50,10 @@
         "streambuf": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "vector": "cpp",
+        "ranges": "cpp",
+        "stop_token": "cpp",
+        "thread": "cpp"
     }
 }

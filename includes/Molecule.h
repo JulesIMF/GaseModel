@@ -27,7 +27,7 @@ Revision History:
 //
 
 #include <Vector2.h>
-#include <Wrapper.h>
+#include <JG.h>
 
 //
 // Defines
@@ -73,14 +73,14 @@ struct Molecule
 
     MoleculeState state;
 
-    static void compareParents(Molecule *first, Molecule *second);
-    static bool commonParents(Molecule *first, Molecule *second);
+    static void compareParents(Molecule* first, Molecule* second);
+    static bool commonParents(Molecule* first, Molecule* second);
 
     virtual void reset();
     virtual void move(double dt);
     virtual void addMomentum(Vector2 dp_i);
     virtual void apply();
-    virtual void display(JG::Window &window) = 0;
+    virtual void display(JG::Canvas& canvas) = 0;
     virtual ~Molecule() = default;
     Molecule(int type) : type(type) {}
     Molecule* parent;
@@ -111,7 +111,7 @@ struct Ball : public Molecule
         setMechanicalState(radius, mass, position, momentum);
     }
 
-    virtual void display(JG::Window &window) override;
+    virtual void display(JG::Canvas& canvas) override;
 };
 
 struct Square : public Molecule
@@ -128,7 +128,7 @@ struct Square : public Molecule
         chemicalEnergy = 0;
     }
 
-    virtual void display(JG::Window &window) override;
+    virtual void display(JG::Canvas& canvas) override;
     virtual void apply() override;
     virtual void reset() override;
 

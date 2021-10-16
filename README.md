@@ -4,8 +4,8 @@ This is an educational project within C++ course. The goal is to get a "gas mode
 
 # What are the smodules?
 
-## Wrapper
-A wrapper for SFML to make life easier. It allows to abstract away from a specific graphics library while solving these type of tasks (constant drawing simple shapes on a window).
+## JG
+A JG for SFML to make life easier. It allows to abstract away from a specific graphics library while solving these type of tasks (constant drawing simple shapes on a window).
 
 ## Vector modules
 Simple classes for 2-d vectors and 3-d vectors

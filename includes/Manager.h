@@ -36,7 +36,7 @@ struct Manager
 {
     Manager(double boundX, double boundY);
     void nextStep(double dt);
-    void display(JG::Window &window) const;
+    void display(JG::Canvas& canvas) const;
     size_t insert(Molecule* molecule);
     Molecule *remove(size_t index);
     void destroy(size_t index);
@@ -98,8 +98,8 @@ protected:
         if (!nTotalBalls) nTotalBalls = ans;
         else if(nTotalBalls != ans)
         {
-            printf("Was %d, now %d!\n", nTotalBalls, ans);
-            __asm__("int $3\n");
+            // printf("Was %d, now %d!\n", nTotalBalls, ans);
+            // __asm__("int $3\n");
         }
     }
 };
