@@ -77,8 +77,14 @@ void Canvas::flush()
             bltCanvas[x][y] = { { float(beginX + x), float(beginY + y) }, { 0, 0, 0 } };
     
     renderMyself();
-    Event paint; paint.type = Event::Paint;
-    window->sendEvent(paint);
+    window->sendEvent(Event::PaintEvent());
+}
+
+void Canvas::transferFromBuffer(Color** buffer)
+{
+    for (int x = 0; x != (int)width; x++)
+        for (int y = 0; y != (int)height; y++)
+            bltCanvas[x][y] = { { float(beginX + x), float(beginY + y) }, buffer[x][y] };
 }
 
 void Canvas::renderMyself()

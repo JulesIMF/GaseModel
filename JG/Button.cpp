@@ -82,8 +82,7 @@ Widget::HandlerResponce Button::onMouseEntered(Event event)
 {
     setCurrentRectangle();
     renderMyself();
-    Event paint = {}; paint.type = Event::Paint;
-    window->sendEvent(paint);
+    window->sendEvent(Event::PaintEvent());
     return Widget::HandlerResponce::Success;
 }
 
@@ -91,8 +90,7 @@ Widget::HandlerResponce Button::onMouseLeft(Event event)
 {
     setCurrentRectangle();
     renderMyself();
-    Event paint = {}; paint.type = Event::Paint;
-    window->sendEvent(paint);
+    window->sendEvent(Event::PaintEvent());
     return Widget::HandlerResponce::Success;
 }
 
@@ -100,8 +98,7 @@ Widget::HandlerResponce Button::onMouseButtonPressed(Event event)
 {
     setCurrentRectangle();
     renderMyself();
-    Event paint = {}; paint.type = Event::Paint;
-    window->sendEvent(paint);
+    window->sendEvent(Event::PaintEvent());
     return Widget::HandlerResponce::Success;
 }
 
@@ -114,9 +111,8 @@ Widget::HandlerResponce Button::onMouseButtonReleased(Event event)
 
     if (event.mouseButton.button == Mouse::Button::Right)
         onRightClick(event);
-
-    Event paint = {}; paint.type = Event::Paint;
-    window->sendEvent(paint);
+        
+    window->sendEvent(Event::PaintEvent());
     return Widget::HandlerResponce::Success;
 }
 

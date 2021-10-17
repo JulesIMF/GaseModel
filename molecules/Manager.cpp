@@ -200,6 +200,21 @@ void Manager::nextStep(double dt)
     normalize();
 }
 
+Manager::Statistics Manager::getStatistics()
+{
+    Statistics stat;
+    for (auto molecule : gas)
+    {
+        if (molecule->type == (int)MoleculeType::BALL)
+            stat.nBalls++;
+        
+        if (molecule->type == (int)MoleculeType::BALL)
+            stat.nBalls++;
+    }
+
+    return stat;
+}
+
 void Manager::recalcInit()
 {
     initEnergy = totalEnergy();

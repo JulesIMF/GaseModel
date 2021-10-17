@@ -29,7 +29,7 @@ endif
 CXX	    = g++ -std=c++17
 INC	    = -Iincludes -IJG/includes
 SFML    = -lsfml-graphics -lsfml-window -lsfml-system
-OPT	    = -O0
+OPT	    = -O2
 DEF		= -DNDEBUG
 CFLAGS	= $(OPT) $(DEF) $(ASAN) -g $(INC)
 OBJ	    = obj/
@@ -38,15 +38,14 @@ FILES   = $(OBJ)main.o \
           $(OBJ)vector/Vector2.o \
           $(OBJ)molecules/Molecule.o \
 		  $(OBJ)molecules/Manager.o \
-		  $(OBJ)molecules/physics.o \
-		  JG/libJG.a
+		  $(OBJ)molecules/physics.o
 
 #
 # Rules
 #
 
-mol: $(FILES)
-	$(CXX) $(CFLAGS) $(FILES) -pthread $(SFML) -lX11 -o $@
+mol: $(FILES) JG/libJG.a
+	$(CXX) $(CFLAGS) $(FILES) JG/libJG.a -pthread $(SFML) -lX11 -o $@
 #	(make clean;)
 
 JG/libJG.a: 
@@ -57,8 +56,11 @@ obj/%.o: %.cpp
 	mkdir -p $(@D)
 	mv $(@F) $@
 
-clean:
+clean-there:
 	rm $(FILES)
+
+clean:
+	(make clean-there)
 	(cd JG; make clean)
 
 %: %.cpp

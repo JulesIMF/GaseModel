@@ -105,6 +105,9 @@ namespace JG
 
         Window* window;
 
+        static Event PaintEvent() { Event event; event.type = Paint; return event; }
+        static Event CloseEvent() { Event event; event.type = Close; return event; }
+
     protected:
 #ifdef SFML_WRAPPER
         sf::Event sfEvent;

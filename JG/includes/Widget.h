@@ -195,7 +195,11 @@ namespace JG
 
             bltCanvas[x][y].color = color;
         }
+
         Color getPixel(int x, int y) { return bltCanvas[x][y].color; }
+
+        void transferFromBuffer(Color** buffer);
+
     #ifdef SFML_WRAPPER
     protected:
         sf::Vertex** bltRender,      // this blt should be displayed now

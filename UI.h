@@ -26,6 +26,7 @@ Revision History:
 #include <cmath>
 #include <Manager.h>
 #include <JG.h>
+#include "Plot.h"
 
 //
 // Defines
@@ -34,11 +35,11 @@ Revision History:
 namespace Main
 {
     int const sizeX = 1280, sizeY = 720;
-    int const width = 1000, height = 500;
+    int const width = 1000, height = 300;
 
     int const  space = 50;
     int const buttonWidth = sizeX - width - 3 * space;
-    int const buttonHeight = sizeY - height - 3 * space;
+    int const buttonHeight = buttonWidth / 2;
 
     Manager* manager;
     int step;
@@ -86,18 +87,26 @@ namespace Main
         {
             if (event.key.code == JG::Keyboard::Enter)
                 onClick(event);
+            
+            return HandlerResponce::Success;
         }
     };
 
     ButtonAdd* buttonAdd;
     JG::Canvas* canvas;
+    Plot* plot;
+    int ballsPen = 0, squarePen = 0;
 
     struct MainWindow : public JG::Window
     {
-        MainWindow() : Window(sizeX, sizeY, "ALEXANDR GANDYRBAYEV", Window::Default^ Window::Resize)
+        MainWindow() : Window(sizeX, sizeY, "ALEXANDR GANDYRBAYEV", Window::Default ^ Window::Resize)
         {
             addChild(buttonAdd = new ButtonAdd(this));
             addChild(canvas = new JG::Canvas(this, space, space, Main::width, Main::height));
+            addChild(plot = new Plot(this, space, space * 2 + Main::height, Main::width, Main::sizeY - Main::height - 3 * space));
+
+            ballsPen  = plot->newPen({217, 11, 172}); // Лиловый
+            squarePen = plot->newPen({2, 161, 196}); // Голубой
         }
 
         virtual void renderMyself()

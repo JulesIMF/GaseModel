@@ -70,8 +70,7 @@ namespace JG
                 static_cast<RenderableWidget*>(widget)->setWindow(this);
             
             Widget::addChild(widget);
-            Event paint = {}; paint.type = Event::Paint;
-            window->sendEvent(paint);
+            window->sendEvent(Event::PaintEvent());
         }
 
 

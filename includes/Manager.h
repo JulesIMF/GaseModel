@@ -34,6 +34,12 @@ Revision History:
 
 struct Manager
 {
+    struct Statistics
+    {
+        int nBalls = 0;
+        int nSquares = 0;
+    };
+    
     Manager(double boundX, double boundY);
     void nextStep(double dt);
     void display(JG::Canvas& canvas) const;
@@ -46,6 +52,7 @@ struct Manager
     double totalArea() const;
     double totalMass() const;
     void normalize();
+    Statistics getStatistics();
 
     
     void setMinEnergy(MoleculeType first, MoleculeType second, double newMinEnergy);

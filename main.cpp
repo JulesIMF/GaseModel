@@ -159,6 +159,8 @@ int main(int nArgs, char const** vArgs)
 
     printState(manager, 0);
 
+    int startTime = time(NULL);
+
     while(true)
     {
         while (window.pollEvent(event))
@@ -174,9 +176,15 @@ int main(int nArgs, char const** vArgs)
             }
         }
 
-        if (timeHasCome(clock, previousTimeDisplayed, fps))
+        double timeSinceLastDisplay = 0;
+        if (timeHasCome(clock, previousTimeDisplayed, fps, timeSinceLastDisplay))
         {
            manager.display(*Main::canvas);
+           auto statistics = manager.getStatistics();
+           printf("Enter\n");
+           Main::plot->moveSetPen(Main::ballsPen,  timeSinceLastDisplay, statistics.nBalls);
+           Main::plot->moveSetPen(Main::squarePen, timeSinceLastDisplay, statistics.nSquares);
+           printf("Exit\n");
         }
 
         double timeSinceLastStep = 0;

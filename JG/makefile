@@ -30,7 +30,7 @@ INC	    = -Iincludes
 OBJ	    =  obj/
 WARN	= -Wall -Wextra -Werror
 SFML    = -lsfml-graphics -lsfml-window -lsfml-system
-OPT	    = -O0
+OPT	    = -O2
 DEF		= -DNDEBUG
 CFLAGS	= $(OPT) $(DEF) $(ASAN) $(WARN) -g -pthread $(INC)
 
